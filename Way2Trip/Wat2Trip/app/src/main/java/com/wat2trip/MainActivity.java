@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.wat2trip.Utils.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
+    CircleImageView flight,bus,train,hotel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        flight = (CircleImageView) findViewById(R.id.flight);
+        bus = (CircleImageView) findViewById(R.id.bus);
+        train = (CircleImageView) findViewById(R.id.train);
+        hotel = (CircleImageView) findViewById(R.id.hotel);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
