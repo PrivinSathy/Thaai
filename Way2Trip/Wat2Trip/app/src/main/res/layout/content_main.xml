@@ -5,18 +5,76 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wat2trip.MainActivity"
+    tools:context="com.wat2trip.Activitys.MainActivity"
     tools:showIn="@layout/activity_main">
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:background="@color/colorPrimary">
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_settings_applications_white_24dp"/>
+
+
+
+            <TextView
+                android:id="@+id/medicineToolbarText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:text="Way2Trip"
+                android:textSize="20sp"
+                android:textColor="#ffffff"/>
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <RelativeLayout
+        android:id="@+id/homeDetails"
+        android:layout_below="@+id/home_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/homePager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </android.support.v4.view.ViewPager>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Home"
+            android:textSize="30dp"
+            android:layout_centerInParent="true"></TextView>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/home_icon"
         android:orientation="horizontal"
-        android:background="@color/blue"
+        android:background="#36bcd1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="48dp">
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,44 +87,48 @@
                 android:layout_width="50dp"
                 android:layout_height="70dp"
                 android:id="@+id/flight"
+                app:civ_border_color="#fff"
                 android:layout_weight="1.5"
                 android:background="@drawable/white_circle"
-                android:layout_margin="10dp"/>
+                android:layout_margin="5dp"/>
 
             <com.wat2trip.Utils.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
                 android:id="@+id/train"
+                app:civ_border_color="#fff"
                 android:background="@drawable/white_circle"
                 android:layout_weight="1.5"
-                android:layout_margin="10dp"/>
+                android:layout_margin="5dp"/>
 
             <com.wat2trip.Utils.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
                 android:id="@+id/hotel"
+                app:civ_border_color="#fff"
                 android:background="@drawable/white_circle"
                 android:layout_weight="1.5"
-                android:layout_margin="10dp"/>
+                android:layout_margin="5dp"/>
 
             <com.wat2trip.Utils.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
                 android:id="@+id/bus"
+                app:civ_border_color="#fff"
                 android:background="@drawable/white_circle"
                 android:layout_weight="1.5"
-                android:layout_margin="10dp"/>
+                android:layout_margin="5dp"/>
         </LinearLayout>
 
     </LinearLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/home_details"
-        android:layout_below="@+id/home_icon"
+
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    </android.support.v4.view.ViewPager>
+        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
