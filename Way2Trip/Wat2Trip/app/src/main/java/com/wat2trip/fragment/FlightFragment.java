@@ -18,6 +18,15 @@ public class FlightFragment extends Fragment {
     public FlightFragment() {
 
     }
+
+
+    public static FlightFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt("ARG_PAGE", page);
+        FlightFragment fragment = new FlightFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

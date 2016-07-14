@@ -18,6 +18,13 @@ public class HotelFragment extends Fragment {
     public HotelFragment() {
 
     }
+    public static HotelFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt("ARG_PAGE", page);
+        HotelFragment fragment = new HotelFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

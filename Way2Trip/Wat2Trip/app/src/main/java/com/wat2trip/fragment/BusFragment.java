@@ -18,6 +18,13 @@ public class BusFragment extends Fragment {
     public BusFragment() {
 
     }
+    public static BusFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt("ARG_PAGE", page);
+        BusFragment fragment = new BusFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

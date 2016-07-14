@@ -16,4 +16,5 @@ public class Settings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
     }
+
 }

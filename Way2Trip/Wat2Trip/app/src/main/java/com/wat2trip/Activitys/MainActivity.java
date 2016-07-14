@@ -1,39 +1,36 @@
 package com.wat2trip.Activitys;
 
+import android.animation.Animator;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
+import com.eftimoff.viewpagertransformers.RotateDownTransformer;
 import com.wat2trip.R;
-import com.wat2trip.Utils.CircleImageView;
 import com.wat2trip.adapter.PageAdapterHome;
-import com.wat2trip.fragment.BusFragment;
-import com.wat2trip.fragment.FlightFragment;
-import com.wat2trip.fragment.HotelFragment;
-import com.wat2trip.fragment.TrainFragment;
 
-public class MainActivity extends AppCompatActivity {
-    CircleImageView flight,bus,train,hotel;
+public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
     ViewPager viewPager;
     RelativeLayout homeLayout;
     FloatingActionButton fab;
     ImageButton settings;
-    private static final String KEY_SELECTED_PAGE = "KEY_SELECTED_PAGE";
-    private static final String KEY_SELECTED_CLASS = "KEY_SELECTED_CLASS";
-    private int mSelectedItem;
-
-    PageAdapterHome mAdapter;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +38,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initialization();
         SetOnClickListener();
-        getCurrentFragment();
     }
 
     private void initialization() {
-
-        settings = (ImageButton) findViewById(R.id.settings);
-        flight = (CircleImageView) findViewById(R.id.flight);
-        bus = (CircleImageView) findViewById(R.id.bus);
-        train = (CircleImageView) findViewById(R.id.train);
-        hotel = (CircleImageView) findViewById(R.id.hotel);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        viewPager = (ViewPager) findViewById(R.id.homePager);
         homeLayout = (RelativeLayout) findViewById(R.id.homeDetails);
-        mAdapter = new PageAdapterHome(getSupportFragmentManager());
-        viewPager.setAdapter(mAdapter);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        settings = (ImageButton) findViewById(R.id.settings);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        viewPager.setVisibility(View.GONE);
     }
 
     private void SetOnClickListener() {
 
+        viewPager.setAdapter(new PageAdapterHome(getSupportFragmentManager(),
+                MainActivity.this));
+        viewPager.setPageTransformer(true, new RotateDownTransformer());
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_flight_white_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_train_white_24dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_directions_bus_white_24dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_hotel_white_24dp);
+
+        tabLayout.setOnTabSelectedListener(this);
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,74 +71,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clearBackStack();
+                revealRed();
+                viewPager.setVisibility(View.GONE);
                 homeLayout.setVisibility(View.VISIBLE);
             }
         });
-
-        flight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeLayout.setVisibility(View.GONE);
-                clearBackStack();
-                Fragment fragment = new FlightFragment();
-                FragmentTransaction transaction =getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.container, fragment, "Flight");
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        bus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeLayout.setVisibility(View.GONE);
-                clearBackStack();
-                Fragment fragment = new BusFragment();
-                FragmentTransaction transaction =getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.container, fragment, "Bus");
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        train.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeLayout.setVisibility(View.GONE);
-                clearBackStack();
-                Fragment fragment = new TrainFragment();
-                FragmentTransaction transaction =getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.container, fragment, "Train");
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        hotel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeLayout.setVisibility(View.GONE);
-                clearBackStack();
-                Fragment fragment = new HotelFragment();
-                FragmentTransaction transaction =getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.container, fragment, "Hotel");
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-    }
-
-    private Fragment getCurrentFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        return fragment;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        getCurrentFragment().onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -145,16 +83,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
-    public void clearBackStack() {
-        FragmentManager fm = getSupportFragmentManager();
-        int count = fm.getBackStackEntryCount();
-        for (int i = 0; i < count; ++i) {
-            fm.popBackStackImmediate();
-        }
-    }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -168,8 +96,68 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(KEY_SELECTED_CLASS, mSelectedItem);
-        outState.putInt(KEY_SELECTED_PAGE, viewPager.getCurrentItem());
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setVisibility(View.VISIBLE);
+        homeLayout.setVisibility(View.GONE);
     }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    private void revealRed() {
+        final ViewGroup.LayoutParams originalParams = fab.getLayoutParams();
+        Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.changebounds_with_arcmotion);
+        transition.addListener(new Transition.TransitionListener() {
+            @Override
+            public void onTransitionStart(Transition transition) {
+            }
+
+            @Override
+            public void onTransitionEnd(Transition transition) {
+                animateRevealColor(homeLayout, R.color.pink);
+                fab.setLayoutParams(originalParams);
+            }
+
+            @Override
+            public void onTransitionCancel(Transition transition) {
+            }
+
+            @Override
+            public void onTransitionPause(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionResume(Transition transition) {
+
+            }
+        });
+        TransitionManager.beginDelayedTransition(homeLayout, transition);
+    }
+
+    private void animateRevealColor(ViewGroup viewRoot, @ColorRes int color) {
+        int cx = (viewRoot.getLeft() + viewRoot.getRight()) / 2;
+        int cy = (viewRoot.getTop() + viewRoot.getBottom()) / 2;
+        animateRevealColorFromCoordinates(viewRoot, color, cx, cy);
+    }
+
+    private Animator animateRevealColorFromCoordinates(ViewGroup viewRoot, @ColorRes int color, int x, int y) {
+        float finalRadius = (float) Math.hypot(viewRoot.getWidth(), viewRoot.getHeight());
+
+        Animator anim = ViewAnimationUtils.createCircularReveal(viewRoot, x, y, 0, finalRadius);
+        viewRoot.setBackgroundColor(ContextCompat.getColor(this, color));
+        anim.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.start();
+        return anim;
+    }
+
 }

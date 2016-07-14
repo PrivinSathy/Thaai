@@ -19,6 +19,13 @@ public class TrainFragment extends Fragment{
     public TrainFragment() {
 
     }
+    public static TrainFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt("ARG_PAGE", page);
+        TrainFragment fragment = new TrainFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
